@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}BlogPost{% endblock title %}
+{%block blogactive%}active{%endblock blogactive%}
+{% block body %}
+<div class="container my-3">
+  <article class="blog-post">
+    <h2 class="blog-post-title mb-1">{{post.title}}</h2>
+    <p class="blog-post-meta">{{post.timeStamp}} by <a href="#">{{post.author}}</a></p>
+    <p>{{post.content}} </p>
+    <nav>
+      <button type="button" class="summerize btn btn-dark m-4">Summerize</button>
+      <button type="button" class="translate btn btn-dark">Translate</button>
+      <button type="button" class="speech btn btn-dark m-4">Speech</button>
+    </nav>
+
+</div>
+<section class="container my-2">
+  <h2>Comments :</h2>
+
+
+  <br>
+
+  {% if user.is_authenticated %}
+
+  <form action="" method="POST">
+    <div>
+      <label for="inputEmail4" class="form-label">{{comment.user.username}}</label>
+
+      {% csrf_token %}
+      <input type="text" name="comments" placeholder="enter Your comment">
+
+      <input type="hidden" name="postSno" value='{{post.sno}}'>
+      <input type="hidden" name="parentSno" value="">
+      <button type="Submit" class="btn btn-primary" value="Submit"> Submit
+      </button>
+    </div>
+  </form>
+  {% else %} <h2>You need to Login for comment</h2>
+  {% endif %}
+
+  {% for comment in comments %}
+  <div>
+    <div class="row my-3">
+      <div class="col-md-1">
+
+
+      </div>
+      <div class="col-md-11 "><b><img src="/static/img/user.png" class="img-thumbnail" width=50 height=50 alt="user"> {{comment.user.username }} </b> ( <i>{{comment.timestamp}}</i>)
+        <div class="row my-2 ">{{ comment.comment }}</div>
+
+       
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% endfor %}
+  <div class="d-flex justify-content-left ml-20">
+    <button type="button" class="btn btn-dark m-4 ">Analize sentiments</button>
+  </div>
+</section>
+{% endblock body %}
