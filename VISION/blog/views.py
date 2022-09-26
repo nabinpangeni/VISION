@@ -24,10 +24,9 @@ def postComment(request):
         post=Postblog.objects.get(sno=postSno)
         
        
-        comments=BlogComment(comment=comments,user=user,post=post)
-        comments.save()
-        messages.success(request,"Your comment has been posted successfully")
-      
+    comments=BlogComment(comment=comments,user=user,post=post)
+    comments.save()
+    messages.success(request,"Your comment has been posted successfully")
     return redirect(f"/blog/{post.slug}")
 
 
