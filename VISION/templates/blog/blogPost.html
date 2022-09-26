@@ -22,7 +22,7 @@
 
   {% if user.is_authenticated %}
 
-  <form action="" method="POST">
+  <form action="/blog/postComment" method="POST">
     <div>
       <label for="inputEmail4" class="form-label">{{comment.user.username}}</label>
 
