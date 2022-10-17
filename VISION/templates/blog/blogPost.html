@@ -5,12 +5,35 @@
 <div class="container my-3">
   <article class="blog-post">
     <h2 class="blog-post-title mb-1">{{post.title}}</h2>
-    <p class="blog-post-meta">{{post.timeStamp}} by <a href="#">{{post.author}}</a></p>
-    <p>{{post.content}} </p>
+    <p clss="blog-post-meta">{{post.timeStamp}} by <a href="#">{{post.author}}</a></p>
+    <p >{{post.content}} </p>
     <nav>
       <button type="button" class="summerize btn btn-dark m-4">Summerize</button>
-      <button type="button" class="translate btn btn-dark">Translate</button>
-      <button type="button" class="speech btn btn-dark m-4">Speech</button>
+      <form method="POST" action ='/blog/blogPost'>{% csrf_token %}
+              <select id="inputState"  name="lang">
+                 <option selected value="en">English</option>
+                 <option value="ar">Arabic</option>
+                 <option value="es">Spanish</option>
+                 <option value="fr">Frensh</option>
+                 <option value="de">German</option>
+                 <option value="zh-cn">Chinese</option>
+              </select>
+            <button type="submit" class="btn btn-dark m-4">Translate</button>
+            </form>
+            <p class="mt-4">{{result}}</p>
+      <button type="button" class="speech btn btn-dark m-4">
+        {% load gTTS %}
+    
+    
+        <audio
+        src="{% say 'en-us' post.content %}"
+        controls
+        ></audio>
+    
+    
+
+      </button>
+    </button>
     </nav>
 
 </div>
@@ -30,7 +53,7 @@
       <input type="text" name="comments" placeholder="enter Your comment">
 
       <input type="hidden" name="postSno" value='{{post.sno}}'>
-      <input type="hidden" name="parentSno" value="">
+     
       <button type="Submit" class="btn btn-primary" value="Submit"> Submit
       </button>
     </div>
@@ -46,9 +69,9 @@
 
       </div>
       <div class="col-md-11 "><b><img src="/static/img/user.png" class="img-thumbnail" width=50 height=50 alt="user"> {{comment.user.username }} </b> ( <i>{{comment.timestamp}}</i>)
-        <div class="row my-2 ">{{ comment.comment }}</div>
+        <div>{{ comment.comment }}</div>
 
-       
+        
           </div>
         </div>
       </div>

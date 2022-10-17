@@ -10,5 +10,7 @@ urlpatterns = [
     path("signup/",views.handleSignup, name="handleSignup"),
     path("logout/",views.handleLogout, name="handleLogout"),
     path("login/",views.handleLogin, name="handleLogin"),
+
+
 ]
 

@@ -42,6 +42,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "home.apps.HomeConfig",
     'blog.apps.BlogConfig',
+    'gTTS',
+    'googletrans',
+    'nltk',
+    'numpy',
+    'networkx',
+    
 ]
 
 MIDDLEWARE = [
