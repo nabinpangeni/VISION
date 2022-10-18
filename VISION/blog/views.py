@@ -25,18 +25,8 @@ def blogPost(request,slug):
     post = Postblog.objects.filter(slug=slug).first()
     comments=BlogComment.objects.filter(post=post)
     context={"post":post,"comments":comments }
-    #for translating a blog post 
-    if request.method == "POST":
-        lang = request.POST.get("lang", None)
-        txt = request.POST.get("{{post.content}}", None)
+    return render(request,"blog/blogPost.html",context)
 
-        translator = Translator()
-        tr = translator.translate(txt, dest=lang)
-
-        return redirect(f"/blog/{post.slug}", {"result":tr.text})
- 
-       
-    return render(request,"blog/blogPost.html",context,)
 def postComment(request):
     if request.method=="POST":
 
@@ -51,3 +41,12 @@ def postComment(request):
     return redirect(f"/blog/{post.slug}")
 
 #reference for summerizing a blog 
+def translate_app(request):
+    if request.method=="POST":
+        lang=request.POST.get("lang")
+      
+        translator=Translator()
+        tr=translator.translate("my name is nabin",dest='de')
+        tr.text
+        return redirect(f"/blog/{Postblog.slug}",{"result":tr.text})
+    return redirect(f"/blog/{Postblog.slug}")

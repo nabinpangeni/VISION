@@ -9,7 +9,7 @@
     <p >{{post.content}} </p>
     <nav>
       <button type="button" class="summerize btn btn-dark m-4">Summerize</button>
-      <form method="POST" action ='/blog/blogPost'>{% csrf_token %}
+      <form method="POST" action ="{%url 'trans'%}">{% csrf_token %}
               <select id="inputState"  name="lang">
                  <option selected value="en">English</option>
                  <option value="ar">Arabic</option>

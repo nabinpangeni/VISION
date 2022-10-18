@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'nltk',
     'numpy',
     'networkx',
-    
+      
 ]
 
 MIDDLEWARE = [
