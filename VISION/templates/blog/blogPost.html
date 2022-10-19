@@ -5,16 +5,17 @@
 <div class="container my-3">
   <article class="blog-post">
     <h2 class="blog-post-title mb-1">{{post.title}}</h2>
-    <p clss="blog-post-meta">{{post.timeStamp}} by <a href="#">{{post.author}}</a></p>
-    <p >{{post.content}} </p>
-    <nav>
-      <button type="button" class="summerize btn btn-dark m-4">Summerize</button>
-      <form method="POST" action ="{%url 'trans'%}">{% csrf_token %}
+    <p clss="blog-post-meta ">{{post.timeStamp}} by <a href="#">{{post.author}}</a></p>
+    <p id="content" class='blockquote'>{{post.content}} </p>
+    <ul>
+      <button type="button" id="summer" class="summerize btn btn-dark m-4">Summerize</button>
+      <button type="submit" class="btn btn-dark m-4"><form method="POST" action ="#" id="translate">{% csrf_token %}
               <select id="inputState"  name="lang">
                  <option selected value="en">English</option>
                  <option value="ar">Arabic</option>
                  <option value="es">Spanish</option>
                  <option value="fr">Frensh</option>
+                 <option value="hi">hindi</option>
                  <option value="de">German</option>
                  <option value="zh-cn">Chinese</option>
               </select>
@@ -23,18 +24,15 @@
             <p class="mt-4">{{result}}</p>
       <button type="button" class="speech btn btn-dark m-4">
         {% load gTTS %}
-    
-    
-        <audio
-        src="{% say 'en-us' post.content %}"
-        controls
-        ></audio>
-    
+<audio
+    src="{% say 'en-us' post.content %}"
+    controls
+></audio>
     
 
       </button>
     </button>
-    </nav>
+  </ul>
 
 </div>
 <section class="container my-2">
@@ -83,4 +81,56 @@
     <button type="button" class="btn btn-dark m-4 ">Analize sentiments</button>
   </div>
 </section>
+
+<script>
+  $('#translate').submit(function (event) {
+    event.preventDefault();
+  var formData = {
+      // 'lang': $('input[name=lang]').val(),
+      'lang': $('#inputState').val(),
+      'content': $('#content').text(),
+      'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+
+    }
+  $.ajax({
+      type:'POST',
+      url:'/blog/translate/',
+      data:formData,
+      encode:true
+    })
+    .done(function(data){
+    //   if (Object.keys(JSON.parse(data)).length>0 & JSON.parse(data)!={}){
+ 
+    // }
+    $('#content').text(data);
+    })
+    
+  });
+
+  $('#summer').click(function (event) {
+    // event.preventDefault();
+    console.log("yes")
+  var formData = {
+      // 'lang': $('input[name=lang]').val(),
+      'content': $('#content').text(),
+      'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+
+    }
+  $.ajax({
+      type:'POST',
+      url:'/blog/summer/',
+      data:formData,
+      encode:true
+    })
+    .done(function(data){
+    //   if (Object.keys(JSON.parse(data)).length>0 & JSON.parse(data)!={}){
+ 
+    // }
+    $('#content').text(data);
+    })
+    
+  });
+
+  </script>
+
 {% endblock body %}
