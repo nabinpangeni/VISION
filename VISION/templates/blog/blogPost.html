@@ -9,30 +9,28 @@
     <p id="content" class='blockquote'>{{post.content}} </p>
     <ul>
       <button type="button" id="summer" class="summerize btn btn-dark m-4">Summerize</button>
-      <button type="submit" class="btn btn-dark m-4"><form method="POST" action ="#" id="translate">{% csrf_token %}
-              <select id="inputState"  name="lang">
-                 <option selected value="en">English</option>
-                 <option value="ar">Arabic</option>
-                 <option value="es">Spanish</option>
-                 <option value="fr">Frensh</option>
-                 <option value="hi">hindi</option>
-                 <option value="de">German</option>
-                 <option value="zh-cn">Chinese</option>
-              </select>
-            <button type="submit" class="btn btn-dark m-4">Translate</button>
-            </form>
-            <p class="mt-4">{{result}}</p>
-      <button type="button" class="speech btn btn-dark m-4">
-        {% load gTTS %}
-<audio
-    src="{% say 'en-us' post.content %}"
-    controls
-></audio>
-    
+      <button type="submit" class="btn btn-dark m-4">
+        <form method="POST" action="#" id="translate">{% csrf_token %}
+          <select id="inputState" name="lang">
+            <option selected value="en">English</option>
+            <option value="ar">Arabic</option>
+            <option value="es">Spanish</option>
+            <option value="fr">Frensh</option>
+            <option value="hi">hindi</option>
+            <option value="de">German</option>
+            <option value="zh-cn">Chinese</option>
+          </select>
+          <button type="submit" class="btn btn-dark m-4">Translate</button>
+        </form>
+        <p class="mt-4">{{result}}</p>
+        <button type="button" class="speech btn btn-dark m-4">
+          {% load gTTS %}
+          <audio src="{% say 'en-us' post.content %}" controls></audio>
 
+
+        </button>
       </button>
-    </button>
-  </ul>
+    </ul>
 
 </div>
 <section class="container my-2">
@@ -50,8 +48,8 @@
       {% csrf_token %}
       <input type="text" name="comments" placeholder="enter Your comment">
 
-      <input type="hidden" name="postSno" value='{{post.sno}}'>
-     
+      <input type="hidden"  name="postSno" value='{{post.sno}}'>
+
       <button type="Submit" class="btn btn-primary" value="Submit"> Submit
       </button>
     </div>
@@ -66,71 +64,102 @@
 
 
       </div>
-      <div class="col-md-11 "><b><img src="/static/img/user.png" class="img-thumbnail" width=50 height=50 alt="user"> {{comment.user.username }} </b> ( <i>{{comment.timestamp}}</i>)
-        <div>{{ comment.comment }}</div>
+      <div class="col-md-11 "><b><img src="/static/img/user.png" class="img-thumbnail" width=50 height=50 alt="user">
+          {{comment.user.username }} </b> ( <i>{{comment.timestamp}}</i>)
+        <div class='comments blockquote mx-3'>{{ comment.comment }}</div>
 
-        
-          </div>
-        </div>
+
       </div>
     </div>
+  </div>
+  </div>
   </div>
 
   {% endfor %}
   <div class="d-flex justify-content-left ml-20">
-    <button type="button" class="btn btn-dark m-4 ">Analize sentiments</button>
+    <input type="hidden" id="sno" value="{{post.sno}}"/>
+    
+    <button type="button" id ="senti" class="btn btn-dark m-4 ">Analize sentiments</button><span style="margin-top: 29px;"><label id="dispsenti" class=""></label></span>
   </div>
+
 </section>
 
 <script>
   $('#translate').submit(function (event) {
     event.preventDefault();
-  var formData = {
+    var formData = {
       // 'lang': $('input[name=lang]').val(),
       'lang': $('#inputState').val(),
       'content': $('#content').text(),
       'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
 
     }
-  $.ajax({
-      type:'POST',
-      url:'/blog/translate/',
-      data:formData,
-      encode:true
+    $.ajax({
+      type: 'POST',
+      url: '/blog/translate/',
+      data: formData,
+      encode: true
     })
-    .done(function(data){
-    //   if (Object.keys(JSON.parse(data)).length>0 & JSON.parse(data)!={}){
- 
-    // }
-    $('#content').text(data);
-    })
-    
+      .done(function (data) {
+        //   if (Object.keys(JSON.parse(data)).length>0 & JSON.parse(data)!={}){
+
+        // }
+        $('#content').text(data);
+      })
+
   });
 
   $('#summer').click(function (event) {
     // event.preventDefault();
     console.log("yes")
-  var formData = {
+    var formData = {
       // 'lang': $('input[name=lang]').val(),
       'content': $('#content').text(),
       'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
 
     }
-  $.ajax({
-      type:'POST',
-      url:'/blog/summer/',
-      data:formData,
-      encode:true
+    $.ajax({
+      type: 'POST',
+      url: '/blog/summer/',
+      data: formData,
+      encode: true
     })
-    .done(function(data){
-    //   if (Object.keys(JSON.parse(data)).length>0 & JSON.parse(data)!={}){
- 
-    // }
-    $('#content').text(data);
-    })
-    
+      .done(function (data) {
+        //   if (Object.keys(JSON.parse(data)).length>0 & JSON.parse(data)!={}){
+
+        // }
+        $('#content').text(data);
+      })
+
   });
 
-  </script>
+
+  $('#senti').click(function (event) {
+    // event.preventDefault();
+    console.log("yes")
+    var formData = {
+      // 'lang': $('input[name=lang]').val(),
+      'postSno': $('#sno').val(),
+      'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+
+    }
+    $('#dispsenti').text("Processing......");
+    $.ajax({
+      type: 'POST',
+      url: '/blog/sentiment/',
+      data: formData,
+      encode: true
+    })
+      .done(function (data) {
+        //   if (Object.keys(JSON.parse(data)).length>0 & JSON.parse(data)!={}){
+
+        // }
+        $('#dispsenti').text(data);
+      })
+
+  });
+
+
+</script>
 
 {% endblock body %}

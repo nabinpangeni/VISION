@@ -2,6 +2,8 @@ from http.client import HTTPResponse
 from django import forms
 from django.shortcuts import render ,redirect, HttpResponse
 from requests import post
+
+from blog.code import SentimentAnalyzer
 from .models import BlogComment
 from .models import Postblog
 from django.contrib import messages
@@ -10,7 +12,7 @@ from gtts import gTTS
 from gTTS.templatetags.gTTS import say
 
 from googletrans import Translator
-
+from .code import SentimentAnalyzer
 #An empty array called textForTts
 '''def speech(request):
     if request.method=="POST":
@@ -64,4 +66,33 @@ def summer(request):
         # return redirect(f"/blog/{Postblog.slug}",{"result":tr.text})
         print(sr)
         return HttpResponse(sr)
+    return redirect(f"/blog/{Postblog.slug}")
+
+    '''def SentimentApp(request):
+    context = {}
+    if request.method == 'POST':
+        if form.is_valid():
+            sent = form.cleaned_data.get('Sentence')    # got the sentence
+            textAns = SentimentAnalyzer(sent)
+            context['text'] = textAns
+    
+    context['comments'] = comments
+    return render(request, '{Postblog.slug}', context=context)'''
+
+def sentiment(request):
+    if request.method=="POST":
+        # sent_data=request.POST.get("comment")
+        postSno=request.POST.get("postSno")
+        sent_data=BlogComment.objects.filter(post=postSno)
+        #see=BlogComment.objects.filter()
+        # print(sent_data)
+        score = []   
+        for i in sent_data:
+            score.append(SentimentAnalyzer(i.post.content))
+        
+        # print(sent_req)
+        if (sum(score)/len(score))>0.7:
+            return HttpResponse('Sentiment is:  Positive')
+        else:
+            return HttpResponse('Sentiment is:  Negative')
     return redirect(f"/blog/{Postblog.slug}")

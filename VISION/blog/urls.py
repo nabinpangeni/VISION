@@ -5,6 +5,7 @@ urlpatterns = [
     path('', views.blogHome, name='blogHome'), 
     path("translate/",views.translate_app,name='trans'),
     path("summer/",views.summer,name='summer'),
+    path("sentiment/",views.sentiment,name='senti'),
     path("postComment",views.postComment,name="postComment"), 
     path('<str:slug>', views.blogPost, name='blogPost'),
 ]
